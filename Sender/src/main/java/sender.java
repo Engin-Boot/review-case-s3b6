@@ -46,5 +46,7 @@ public class sender {
             e.printStackTrace();
         }
     }
-	
+	public static void main(String[] args){
+		readDataLineByLine("C:\\Users\\320091455\\BootCamp\\CaseStudy\\review-case-s3b6\\sample-review\\review-report.csv");
+	}
 }

@@ -14,31 +14,30 @@ public class receiver {
         String sw = "and,a,the,an,or,is";
         String[] stopWords=sw.split(",");
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        FileWriter csvWriter = new FileWriter("New.csv");
-        FileWriter csvWriter2 = new FileWriter("wordUsedOn.csv");
+        FileWriter csvWriter = new FileWriter("wordCount.csv");
+        FileWriter csvWriter2 = new FileWriter("wordUsedOnDates.csv");
         String str = null;
         try {
             String colNames = br.readLine();
             str=br.readLine();
-            String regex = "[0-9]*";
-            Pattern p = Pattern.compile(regex);
+            String regexNum = "[0-9]*";
+            Pattern p = Pattern.compile(regexNum);
+            String date="";
             while (!str.equals("done")) {
-                str=str.replace("{"," ");
-                str=str.replace("}"," ");
-                str=str.replace("("," ");
-                str=str.replace(")"," ");
-                str=str.replace("["," ");
-                str=str.replace("]"," ");
-                str=str.replace("."," ");
-
+                str=str.replaceAll("[^a-zA-Z0-9/:]"," ");
                 String[] words=str.split(" ");
                 int flag=0;
-                String date="";
                 for(String word:words) {
                     if(flag==0){
-                        flag++;
-                        date=word;
-                        continue;
+                        if(word.matches("[0-9]+/[0-9]+/[0-9]+")){
+                            flag++;
+                            date=word;
+                            continue;
+                        }
+                        else
+                        {
+                            flag=2;
+                        }
                     }
                     if(flag==1){
                         flag++;
@@ -47,8 +46,7 @@ public class receiver {
                     Matcher m = p.matcher(word);
                     if(m.matches()==true)
                         continue;
-                    word=word.replace("“","");
-                    word=word.replace("\"","");
+
                     if (wordCount.containsKey(word)) {
                         wordCount.put(word, wordCount.get(word) + 1);
                         wordWithDate.put(word,wordWithDate.get(word)+" " +date);
